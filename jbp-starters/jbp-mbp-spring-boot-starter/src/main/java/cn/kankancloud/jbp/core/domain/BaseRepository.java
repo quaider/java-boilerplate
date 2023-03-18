@@ -12,9 +12,18 @@ public abstract class BaseRepository<K extends Serializable, T extends Aggregate
     @Override
     public void save(T aggregate) {
 
+        if (aggregate.entityStatus().isUnchanged()) {
+            log.warn("persisted request is made, but the aggregate is unchanged!!!");
+            return;
+        }
+
         eventStore().append(aggregate.getEvents());
 
-        saveInternal(aggregate);
+        K id = saveInternal(aggregate);
+
+        if (aggregate.entityStatus().isNew() && aggregate.getId() == null) {
+            aggregate.onPersisted(id);
+        }
 
         // publish event to memory event bus
         // 事件发布的时机 理想情况下，应该是 在事务提交成功后，且数据库连接被释放之后
@@ -22,7 +31,6 @@ public abstract class BaseRepository<K extends Serializable, T extends Aggregate
         // 1. 事件处理器是异步的
         // 2. 需要加上注解 @TransactionalEventListener
         // 这样可以保证，事件处理器的执行 是在「事务提交之后」，异步的目的是 不阻塞事务和隔离数据库连接
-        // todo: 这里是否改成开启线程池异步分发事件更好？，这样事件处理器就无需关注更多细节了
         aggregate.getEvents().forEach(evt -> {
             log.info("publishing domain event, eventId={}, occurredOn={}", evt.eventId(), evt.occurredOn());
             applicationEventPublisher().publishEvent(evt);
@@ -31,7 +39,13 @@ public abstract class BaseRepository<K extends Serializable, T extends Aggregate
         aggregate.clearEvents();
     }
 
-    protected abstract void saveInternal(T aggregate);
+    /**
+     * 保存聚合
+     *
+     * @param aggregate 待保存的聚合对象
+     * @return 新建状态返回聚合id，修改和删除状态返回受影响的行数，未修改状态返回-1
+     */
+    protected abstract K saveInternal(T aggregate);
 
     protected IEventStore eventStore() {
         return ServiceProvider.getService(IEventStore.class);
