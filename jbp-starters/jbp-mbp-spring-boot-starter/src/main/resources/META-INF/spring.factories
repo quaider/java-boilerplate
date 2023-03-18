@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cn.kankancloud.jbp.mbp.MbpAutoConfiguration,\
+  cn.kankancloud.jbp.mbp.TenantPluginConfiguration
