@@ -24,7 +24,7 @@ import java.util.Objects;
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 @MapperScans(
         value = {
-                @MapperScan(basePackages = {"cn.kankancloud.mbp.persistence"})
+                @MapperScan(basePackages = {"cn.kankancloud.jbp.mbp.persistence"})
         }
 )
 @Import(DataScopePluginConfiguration.class)
