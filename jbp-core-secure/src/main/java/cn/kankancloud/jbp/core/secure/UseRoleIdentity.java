@@ -9,27 +9,30 @@ import java.util.List;
 @Getter
 public class UseRoleIdentity implements IIdentity {
 
-    private final String userId;
-    private String fullname;
+    private final UserDetail userDetail;
     private final List<String> roles;
 
-    public UseRoleIdentity(String userId, List<String> roles) {
-        this.userId = userId;
+    public UseRoleIdentity(UserDetail userDetail, List<String> roles) {
+        if (userDetail == null) {
+            throw new IllegalArgumentException("userDetail");
+        }
+
+        this.userDetail = userDetail;
         this.roles = roles;
     }
 
     @Override
     public String name() {
-        return UseRoleIdentity.class.getSimpleName();
+        return userDetail.account();
     }
 
     @Override
     public String authenticationType() {
-        return "RBAC";
+        return "default";
     }
 
     @Override
     public boolean isAuthenticated() {
-        return !StringUtils.isNoneEmpty(userId);
+        return !StringUtils.isNoneEmpty(userDetail.identity());
     }
 }

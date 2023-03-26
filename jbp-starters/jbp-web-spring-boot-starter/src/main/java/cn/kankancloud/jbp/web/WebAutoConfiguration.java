@@ -1,6 +1,7 @@
 package cn.kankancloud.jbp.web;
 
 import cn.kankancloud.jbp.common.RejectExecutionFactory;
+import cn.kankancloud.jbp.core.secure.HttpPrincipalFactory;
 import cn.kankancloud.jbp.core.security.context.PrincipalFactory;
 import cn.kankancloud.jbp.core.security.context.SupportedPrincipalFactories;
 import cn.kankancloud.jbp.core.security.context.ThreadLocalPrincipalFactory;
@@ -21,6 +22,7 @@ public class WebAutoConfiguration {
 
     @Bean
     public List<PrincipalFactory> principalFactories() {
+        SupportedPrincipalFactories.register(new HttpPrincipalFactory());
         SupportedPrincipalFactories.register(new ThreadLocalPrincipalFactory());
 
         return SupportedPrincipalFactories.getPrincipalFactories();

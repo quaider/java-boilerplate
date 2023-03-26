@@ -13,6 +13,7 @@
         <module>jbp-common</module>
         <module>jbp-core</module>
         <module>jbp-core-secure</module>
+        <module>jbp-core-web</module>
     </modules>
 
     <packaging>pom</packaging>

@@ -29,6 +29,12 @@
         </dependency>
 
         <dependency>
+            <groupId>cn.kankancloud</groupId>
+            <artifactId>jbp-core-secure</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
             <scope>provided</scope>
