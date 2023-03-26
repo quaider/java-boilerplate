@@ -1,4 +1,4 @@
-package cn.kankancloud.jbp.core.principal;
+package cn.kankancloud.jbp.core.security.context;
 
 import cn.kankancloud.jbp.core.abstraction.IDisposable;
 import cn.kankancloud.jbp.core.RequestScopeDisposableTracker;

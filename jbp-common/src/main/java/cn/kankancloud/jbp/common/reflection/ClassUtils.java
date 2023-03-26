@@ -139,7 +139,7 @@ public class ClassUtils {
     }
 
     private static boolean shouldExcluded(String[] exclusions, String packageName) {
-        if (exclusions == null || exclusions.length == 0) {
+        if (exclusions == null) {
             return false;
         }
 

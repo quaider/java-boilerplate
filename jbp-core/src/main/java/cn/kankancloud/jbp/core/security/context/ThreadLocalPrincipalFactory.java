@@ -1,10 +1,11 @@
-package cn.kankancloud.jbp.core.principal;
+package cn.kankancloud.jbp.core.security.context;
 
 import cn.kankancloud.jbp.core.abstraction.IDisposable;
+import cn.kankancloud.jbp.core.security.principal.IPrincipal;
 
 public class ThreadLocalPrincipalFactory implements PrincipalFactory, IDisposable {
 
-    private static final ThreadLocal<UserPrincipal> ctx = new InheritableThreadLocal<>();
+    private static final ThreadLocal<IPrincipal> ctx = new InheritableThreadLocal<>();
 
     @Override
     public String name() {
@@ -12,13 +13,13 @@ public class ThreadLocalPrincipalFactory implements PrincipalFactory, IDisposabl
     }
 
     @Override
-    public UserPrincipal getCurrent() {
+    public IPrincipal getCurrent() {
         return ctx.get();
     }
 
     @Override
-    public void setCurrent(UserPrincipal userPrincipal) {
-        ctx.set(userPrincipal);
+    public void setCurrent(IPrincipal principal) {
+        ctx.set(principal);
     }
 
     @Override

@@ -12,6 +12,7 @@
         <module>jbp-starters</module>
         <module>jbp-common</module>
         <module>jbp-core</module>
+        <module>jbp-core-secure</module>
     </modules>
 
     <packaging>pom</packaging>
