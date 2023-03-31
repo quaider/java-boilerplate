@@ -57,19 +57,11 @@ public class CastUtil {
         return defaultValue;
     }
 
-    public static boolean isTrue(Boolean value) {
-        return value != null && value;
-    }
-
-    public static boolean isFalse(Boolean value) {
-        return !isTrue(value);
-    }
-
     public static Integer[] toIntArray(String str) {
-        return toIntArray(",", str);
+        return toIntArray(str, ",");
     }
 
-    public static Integer[] toIntArray(String split, String str) {
+    public static Integer[] toIntArray(String str, String split) {
         if (StrUtil.isEmpty(str)) {
             return new Integer[]{};
         }
@@ -86,15 +78,15 @@ public class CastUtil {
         return Arrays.asList(toIntArray(str));
     }
 
-    public static List<Integer> toIntList(String split, String str) {
-        return Arrays.asList(toIntArray(split, str));
+    public static List<Integer> toIntList(String str, String split) {
+        return Arrays.asList(toIntArray(str, split));
     }
 
     public static Long[] toLongArray(String str) {
-        return toLongArray(",", str);
+        return toLongArray(str, ",");
     }
 
-    public static Long[] toLongArray(String split, String str) {
+    public static Long[] toLongArray(String str, String split) {
         if (StrUtil.isEmpty(str)) {
             return new Long[]{};
         }
@@ -111,18 +103,19 @@ public class CastUtil {
         return Arrays.asList(toLongArray(str));
     }
 
-    public static List<Long> toLongList(String split, String str) {
-        return Arrays.asList(toLongArray(split, str));
+    public static List<Long> toLongList(String str, String split) {
+        return Arrays.asList(toLongArray(str, split));
     }
 
     public static String[] toStrArray(String str) {
-        return toStrArray(",", str);
+        return toStrArray(str, ",");
     }
 
-    public static String[] toStrArray(String split, String str) {
+    public static String[] toStrArray(String str, String split) {
         if (StrUtil.isBlank(str)) {
             return new String[]{};
         }
+
         return str.split(split);
     }
 
@@ -130,8 +123,8 @@ public class CastUtil {
         return Arrays.asList(toStrArray(str));
     }
 
-    public static List<String> toStrList(String split, String str) {
-        return Arrays.asList(toStrArray(split, str));
+    public static List<String> toStrList(String str, String split) {
+        return Arrays.asList(toStrArray(str, split));
     }
 
     /**

@@ -2,7 +2,7 @@ package cn.kankancloud.jbp.core.security.context;
 
 import cn.kankancloud.jbp.core.security.principal.IPrincipal;
 
-public interface PrincipalFactory {
+public interface PrincipalHolder {
 
     String name();
 

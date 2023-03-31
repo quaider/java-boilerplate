@@ -1,10 +1,10 @@
 package cn.kankancloud.jbp.web;
 
 import cn.kankancloud.jbp.common.RejectExecutionFactory;
-import cn.kankancloud.jbp.core.secure.HttpPrincipalFactory;
-import cn.kankancloud.jbp.core.security.context.PrincipalFactory;
-import cn.kankancloud.jbp.core.security.context.SupportedPrincipalFactories;
-import cn.kankancloud.jbp.core.security.context.ThreadLocalPrincipalFactory;
+import cn.kankancloud.jbp.core.secure.HttpPrincipalHolder;
+import cn.kankancloud.jbp.core.security.context.PrincipalHolder;
+import cn.kankancloud.jbp.core.security.context.SupportedPrincipalHolders;
+import cn.kankancloud.jbp.core.security.context.ThreadLocalPrincipalHolder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -21,11 +21,11 @@ import java.util.concurrent.Executor;
 public class WebAutoConfiguration {
 
     @Bean
-    public List<PrincipalFactory> principalFactories() {
-        SupportedPrincipalFactories.register(new HttpPrincipalFactory());
-        SupportedPrincipalFactories.register(new ThreadLocalPrincipalFactory());
+    public List<PrincipalHolder> principalFactories() {
+        SupportedPrincipalHolders.register(new HttpPrincipalHolder());
+        SupportedPrincipalHolders.register(new ThreadLocalPrincipalHolder());
 
-        return SupportedPrincipalFactories.getPrincipalFactories();
+        return SupportedPrincipalHolders.getPrincipalFactories();
     }
 
     /**

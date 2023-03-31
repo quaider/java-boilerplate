@@ -8,7 +8,7 @@ public class PrincipalContext {
     }
 
     public static IPrincipal getPrincipal() {
-        for (PrincipalFactory factory : SupportedPrincipalFactories.getPrincipalFactories()) {
+        for (PrincipalHolder factory : SupportedPrincipalHolders.getPrincipalFactories()) {
 
             if (factory.supported() && factory.getCurrent() != null) {
                 return factory.getCurrent();

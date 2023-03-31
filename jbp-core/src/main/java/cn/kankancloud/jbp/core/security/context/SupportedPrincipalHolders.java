@@ -9,16 +9,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public final class SupportedPrincipalFactories {
+public final class SupportedPrincipalHolders {
 
-    private static final Logger log = Logger.getLogger(SupportedPrincipalFactories.class.getName());
+    private static final Logger log = Logger.getLogger(SupportedPrincipalHolders.class.getName());
 
-    private SupportedPrincipalFactories() {
+    private SupportedPrincipalHolders() {
     }
 
-    private static final List<PrincipalFactory> principalFactories = new ArrayList<>();
+    private static final List<PrincipalHolder> principalFactories = new ArrayList<>();
 
-    public static void register(PrincipalFactory factory) {
+    public static void register(PrincipalHolder factory) {
         if (principalFactories.stream().noneMatch(f -> f.name().equals(factory.name()))) {
             principalFactories.add(factory);
 
@@ -32,7 +32,7 @@ public final class SupportedPrincipalFactories {
         log.log(Level.WARNING, "PrincipalFactory with name `{}` already exist", factory.name());
     }
 
-    public static List<PrincipalFactory> getPrincipalFactories() {
+    public static List<PrincipalHolder> getPrincipalFactories() {
         return Collections.unmodifiableList(principalFactories);
     }
 }
