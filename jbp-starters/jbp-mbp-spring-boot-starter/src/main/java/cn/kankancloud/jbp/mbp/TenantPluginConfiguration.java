@@ -5,7 +5,7 @@ import cn.kankancloud.jbp.mbp.tenant.TenantInterceptor;
 import cn.kankancloud.jbp.mbp.tenant.TenantProperties;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
-import cn.kankancloud.jbp.core.abstraction.ITenantIdGen;
+import cn.kankancloud.jbp.core.abstraction.ITenantIdGenerator;
 import cn.kankancloud.jbp.core.util.StrUtil;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -24,7 +24,7 @@ public class TenantPluginConfiguration {
 
     @ConditionalOnMissingBean
     @Bean
-    public ITenantIdGen tenantIdGen() {
+    public ITenantIdGenerator tenantIdGen() {
         return () -> StrUtil.random(6, StrUtil.RandomType.ALL);
     }
 

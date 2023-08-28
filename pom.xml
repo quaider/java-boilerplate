@@ -28,11 +28,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <spring-boot.version>2.6.11</spring-boot.version>
-        <spring-cloud.version>2021.0.4</spring-cloud.version>
-        <spring-alibaba.version>2021.0.4.0</spring-alibaba.version>
+        <spring-boot.version>2.6.13</spring-boot.version>
+        <spring-cloud.version>2021.0.5</spring-cloud.version>
+        <spring-alibaba.version>2021.0.5.0</spring-alibaba.version>
         <apollo.version>2.0.1</apollo.version>
-        <mbp.version>3.5.1</mbp.version>
+        <mbp.version>3.5.3.2</mbp.version>
         <mysql-connector.version>8.0.27</mysql-connector.version>
         <h2.version>2.1.210</h2.version>
 
@@ -46,13 +46,13 @@
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
 
-        <fastjson.version>1.2.55</fastjson.version>
+        <jackson-bom.version>2.13.5</jackson-bom.version>
         <guava.version>20.0</guava.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <commons-io.version>2.11.0</commons-io.version>
 
-        <spring-boot-maven-plugin.version>2.6.11</spring-boot-maven-plugin.version>
+        <spring-boot-maven-plugin.version>2.6.15</spring-boot-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -155,18 +155,11 @@
                 <version>${h2.version}</version>
             </dependency>
 
-            <!-- logstash log encoder -->
-            <dependency>
-                <groupId>net.logstash.logback</groupId>
-                <artifactId>logstash-logback-encoder</artifactId>
-                <version>6.6</version>
-            </dependency>
-
             <!-- util lib -->
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>${fastjson.version}</version>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson-bom.version}</version>
             </dependency>
 
             <dependency>

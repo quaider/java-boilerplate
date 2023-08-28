@@ -1,5 +1,5 @@
 package cn.kankancloud.jbp.core.abstraction;
 
-public interface ITenantIdGen {
+public interface ITenantIdGenerator {
     String generate();
 }

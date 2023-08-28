@@ -1,9 +1,10 @@
 package cn.kankancloud.jbp.core.domain;
 
-import com.alibaba.fastjson.JSON;
+import cn.kankancloud.jbp.core.util.JsonUtil;
 import cn.kankancloud.jbp.mbp.persistence.EventPo;
 import cn.kankancloud.jbp.mbp.persistence.EventPoService;
 import com.google.common.collect.Lists;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +31,7 @@ class MbpEventStore implements IEventStore {
         events.forEach(f -> {
             EventPo eventPo = new EventPo();
             eventPo.setEventType(f.getClass().getName());
-            eventPo.setEventBody(JSON.toJSONString(f));
+            eventPo.setEventBody(JsonUtil.toJson(f));
 
             eventPoService.save(eventPo);
 
@@ -62,7 +63,7 @@ class MbpEventStore implements IEventStore {
 
     @Override
     public List<IDomainEvent> latestBatchEvents(int batchSize) {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
