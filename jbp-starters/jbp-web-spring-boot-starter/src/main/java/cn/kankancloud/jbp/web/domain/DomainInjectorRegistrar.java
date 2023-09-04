@@ -32,7 +32,7 @@ public class DomainInjectorRegistrar implements ImportBeanDefinitionRegistrar, R
         DomainInjectorBeanDefinitionScanner scanner = new DomainInjectorBeanDefinitionScanner(registry, false);
         scanner.setResourceLoader(resourceLoader);
 
-        // 此处过滤的为 : 仅注册增加了 @DomainInjector 注解的类，如想实现扫描包下的所有类，则无需注册过滤器
+        // 此处过滤的为: 仅注册增加了 @DomainInjector 注解的类，如想实现扫描包下的所有类，则无需注册过滤器
         scanner.registerFilters();
         scanner.doScan(basePackages);
     }

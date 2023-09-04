@@ -18,6 +18,7 @@ public class DomainInjectorBeanDefinitionScanner extends ClassPathBeanDefinition
         addIncludeFilter(new AnnotationTypeFilter(DomainInjector.class));
     }
 
+    @SuppressWarnings("java:S1185")
     @Override
     protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
         return super.doScan(basePackages);
