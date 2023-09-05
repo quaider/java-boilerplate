@@ -16,14 +16,14 @@ public class AuthorizeExpression {
         return true;
     }
 
-    public boolean hasPermission(String permissionName) { // NOSONAR
+    public boolean hasPermission(String permissionName) {
         return true;
     }
 
     /**
-     * 有当前地址的权限即可访问
+     * 是否有当前地址的权限即可访问
      */
-    public boolean hasUrl() {
+    public boolean hasCurrentUrl() {
         return true;
     }
 

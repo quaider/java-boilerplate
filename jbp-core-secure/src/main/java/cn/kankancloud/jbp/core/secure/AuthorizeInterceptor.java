@@ -1,6 +1,6 @@
 package cn.kankancloud.jbp.core.secure;
 
-import cn.kankancloud.jbp.core.exception.BizAuthorizeException;
+import cn.kankancloud.jbp.core.exception.BizUnAuthorizeException;
 import cn.kankancloud.jbp.core.util.Bools;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -29,28 +29,28 @@ public class AuthorizeInterceptor implements ApplicationContextAware {
 
     @Around("@annotation(cn.kankancloud.jbp.core.secure.Authorize) || @within(cn.kankancloud.jbp.core.secure.Authorize)")
     public Object intercept(ProceedingJoinPoint point) throws Throwable {
-        if (handleAuth(point)) {
+        if (hasAuth(point)) {
             return point.proceed();
         }
 
-        throw new BizAuthorizeException();
+        throw new BizUnAuthorizeException();
     }
 
-    private boolean handleAuth(ProceedingJoinPoint point) {
+    private boolean hasAuth(ProceedingJoinPoint point) {
         MethodSignature ms = (MethodSignature) point.getSignature();
         Method method = ms.getMethod();
         Authorize authorize = method.getAnnotation(Authorize.class);
         String condition = authorize.value();
-        if (StringUtils.isNotBlank(condition)) {
-            Expression expression = EL_PARSER.parseExpression(condition);
-            // 方法参数值
-            Object[] args = point.getArgs();
-            StandardEvaluationContext context = getEvaluationContext(method, args);
-
-            return Bools.isTrue(expression.getValue(context, Boolean.class));
+        if (StringUtils.isBlank(condition)) {
+            return false;
         }
 
-        return false;
+        Expression expression = EL_PARSER.parseExpression(condition);
+        // 方法参数值
+        Object[] args = point.getArgs();
+        StandardEvaluationContext context = getEvaluationContext(method, args);
+
+        return Bools.isTrue(expression.getValue(context, Boolean.class));
     }
 
     /**
@@ -60,7 +60,6 @@ public class AuthorizeInterceptor implements ApplicationContextAware {
      * @param args   变量
      * @return {SimpleEvaluationContext}
      */
-    @Authorize("hasRole('Admin')")
     private StandardEvaluationContext getEvaluationContext(Method method, Object[] args) {
         // 初始化Spring el表达式上下文
         StandardEvaluationContext context = new StandardEvaluationContext(new AuthorizeExpression());

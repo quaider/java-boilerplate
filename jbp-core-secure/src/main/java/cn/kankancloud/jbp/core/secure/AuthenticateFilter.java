@@ -36,14 +36,16 @@ public class AuthenticateFilter extends OncePerRequestFilter {
         IPrincipal principal = principalResolver.resolve(request);
 
         // append principal to supported principal holders
-        SupportedPrincipalHolders.getPrincipalFactories().forEach(fac -> {
-            if (fac instanceof IDisposable) {
-                ((IDisposable) fac).dispose();
-            } else {
-                fac.setCurrent(principal);
-            }
-        });
+        SupportedPrincipalHolders.getPrincipalFactories()
+                .forEach(fac -> fac.setCurrent(principal));
 
         filterChain.doFilter(request, response);
+
+        // dispose principal when http request lifecycle ended
+        SupportedPrincipalHolders.getPrincipalFactories()
+                .stream()
+                .filter(IDisposable.class::isInstance)
+                .map(IDisposable.class::cast)
+                .forEach(IDisposable::dispose);
     }
 }
