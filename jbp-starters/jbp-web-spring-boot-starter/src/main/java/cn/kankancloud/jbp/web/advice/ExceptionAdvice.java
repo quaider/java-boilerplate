@@ -1,4 +1,4 @@
-package cn.kankancloud.jbp.web.exception;
+package cn.kankancloud.jbp.web.advice;
 
 import cn.kankancloud.jbp.core.Result;
 import cn.kankancloud.jbp.core.exception.BizException;
@@ -17,11 +17,10 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler {
+public class ExceptionAdvice {
 
     private static final String BAD_REQUEST_MSG = "参数校验失败";
 
@@ -34,7 +33,7 @@ public class GlobalExceptionHandler {
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         List<FieldValidationError> errors = fieldErrors.stream()
                 .map(f -> new FieldValidationError(f.getField(), f.getDefaultMessage()))
-                .collect(Collectors.toList());
+                .toList();
 
         return Result.failed(ErrorCodeI.VALIDATION_FAILED, BAD_REQUEST_MSG).withErrors(errors);
     }
@@ -48,7 +47,7 @@ public class GlobalExceptionHandler {
         List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
         List<FieldValidationError> errors = fieldErrors.stream()
                 .map(f -> new FieldValidationError(f.getField(), f.getDefaultMessage()))
-                .collect(Collectors.toList());
+                .toList();
 
         return Result.failed(ErrorCodeI.VALIDATION_FAILED, BAD_REQUEST_MSG).withErrors(errors);
     }
@@ -62,7 +61,7 @@ public class GlobalExceptionHandler {
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
         List<FieldValidationError> errors = constraintViolations.stream()
                 .map(f -> new FieldValidationError(f.getPropertyPath().toString(), f.getMessage()))
-                .collect(Collectors.toList());
+                .toList();
 
         return Result.failed(ErrorCodeI.VALIDATION_FAILED, BAD_REQUEST_MSG).withErrors(errors);
     }
