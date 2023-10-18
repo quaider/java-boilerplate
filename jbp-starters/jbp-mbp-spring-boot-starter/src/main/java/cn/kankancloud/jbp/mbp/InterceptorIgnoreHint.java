@@ -18,6 +18,7 @@ import java.util.*;
  * TenantHint.releaseAllHint();
  * </example>
  */
+@SuppressWarnings("rawtypes")
 public class InterceptorIgnoreHint {
 
     private InterceptorIgnoreHint() {

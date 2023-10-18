@@ -7,7 +7,7 @@
     <parent>
         <artifactId>jbp-starters</artifactId>
         <groupId>cn.kankancloud</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>jbp-mbp-spring-boot-starter</artifactId>
@@ -27,17 +27,19 @@
         <dependency>
             <groupId>cn.kankancloud</groupId>
             <artifactId>jbp-core</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>cn.kankancloud</groupId>
             <artifactId>jbp-core-secure</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>cn.kankancloud</groupId>
             <artifactId>jbp-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>

@@ -1,15 +1,23 @@
 package cn.kankancloud.jbp.core;
 
 import cn.kankancloud.jbp.core.exception.ErrorCodeI;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Getter
+@Schema(description = "响应结果")
 public class Result<T> {
+
+    @Schema(description = "响应码")
     private final int code;
+
+    @Schema(description = "错误消息")
     private final String message;
+
+    @Schema(description = "响应数据")
     private final T data;
 
     public Result(int code, String message, T data) {

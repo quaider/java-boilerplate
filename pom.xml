@@ -6,7 +6,7 @@
 
     <groupId>cn.kankancloud</groupId>
     <artifactId>java-boilerplate</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${revision}</version>
 
     <modules>
         <module>jbp-starters</module>
@@ -20,11 +20,11 @@
     <name>java-boilerplate</name>
 
     <properties>
-        <revision>1.0-SNAPSHOT</revision>
+        <revision>1.0.3-SNAPSHOT</revision>
 
-        <java.version>1.8</java.version>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <java.version>17</java.version>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -36,10 +36,8 @@
         <mysql-connector.version>8.0.27</mysql-connector.version>
         <h2.version>2.1.210</h2.version>
 
-        <knife4j.version>4.0.0</knife4j.version>
-        <spring-doc-openapi.version>1.6.9</spring-doc-openapi.version>
-        <swagger.version>2.10.5</swagger.version>
-        <swagger.models.version>2.2.2</swagger.models.version>
+        <knife4j.version>4.3.0</knife4j.version>
+        <swagger.annotations.version>2.2.9</swagger.annotations.version>
 
         <gmavenplus.version>2.1.0</gmavenplus.version>
         <maven-compiler-plugin.version>3.10.1</maven-compiler-plugin.version>
@@ -90,33 +88,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.springdoc</groupId>
-                <artifactId>springdoc-openapi-ui</artifactId>
-                <version>${spring-doc-openapi.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>io.swagger.core.v3</groupId>
                 <artifactId>swagger-annotations</artifactId>
-                <version>${swagger.models.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.swagger.core.v3</groupId>
-                <artifactId>swagger-models</artifactId>
-                <version>${swagger.models.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cn.kankancloud</groupId>
-                <artifactId>jbp-core</artifactId>
-                <version>${revision}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>cn.kankancloud</groupId>
-                <artifactId>jbp-common</artifactId>
-                <version>${revision}</version>
+                <version>${swagger.annotations.version}</version>
             </dependency>
 
             <!-- apollo config -->
@@ -198,9 +172,12 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
                     <version>${maven-source-plugin.version}</version>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
                     <executions>
                         <execution>
-                            <id>attach-sources</id>
+                            <id>compile</id>
                             <goals>
                                 <goal>jar</goal>
                             </goals>
@@ -261,6 +238,40 @@
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot-maven-plugin.version}</version>
                 </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${maven-source-plugin.version}</version>
+                </plugin>
+                <!-- 添加flatten-maven-plugin插件 -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.5.0</version>
+                    <executions>
+                        <execution>
+                            <id>flatten</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>flatten</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>flatten.clean</id>
+                            <phase>clean</phase>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <!-- 避免IDE将 .flattened-pom.xml 自动识别为功能模块 -->
+                        <updatePomFile>true</updatePomFile>
+                        <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
 
@@ -268,7 +279,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>${maven-source-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

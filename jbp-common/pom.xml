@@ -6,7 +6,7 @@
     <parent>
         <artifactId>java-boilerplate</artifactId>
         <groupId>cn.kankancloud</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
     <artifactId>jbp-common</artifactId>
@@ -29,8 +29,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
 
         <dependency>
