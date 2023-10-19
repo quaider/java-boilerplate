@@ -20,17 +20,16 @@ public class CommonReturnTypeParser implements ReturnTypeParser {
     @Override
     public Type getReturnType(MethodParameter methodParameter) {
         Type returnType = ReturnTypeParser.super.getReturnType(methodParameter);
-        Annotation[] annotations =
-                Objects.requireNonNull(methodParameter.getMethod())
-                        .getDeclaringClass()
-                        .getAnnotations();
+        Annotation[] annotations = Objects.requireNonNull(methodParameter.getMethod())
+                .getDeclaringClass()
+                .getAnnotations();
         if (Arrays.stream(annotations)
                 .noneMatch(RestController.class::isInstance)) {
             return returnType;
         }
 
-        if (returnType.getTypeName().equals("void")) {
-            return returnType;
+        if (returnType == void.class || returnType == Void.class) {
+            return TypeUtils.parameterize(Result.class, Void.class);
         }
 
         Class<?> rawType = TypeUtils.getRawType(returnType, null);
