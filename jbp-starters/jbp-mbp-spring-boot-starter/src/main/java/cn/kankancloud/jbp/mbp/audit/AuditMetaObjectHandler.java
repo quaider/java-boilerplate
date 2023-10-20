@@ -15,8 +15,10 @@ public class AuditMetaObjectHandler implements MetaObjectHandler {
 
     private static final String CREATE_TIME_FIELD = "createTime";
     private static final String UPDATE_TIME_FIELD = "updateTime";
-    private static final String CREATE_USER_FIELD = "createUser";
-    private static final String UPDATE_USER_FIELD = "updateUser";
+    private static final String CREATE_USER_FIELD = "createUserAccount";
+    private static final String CREATE_USER_NAME_FIELD = "createUserName";
+    private static final String UPDATE_USER_FIELD = "updateUserAccount";
+    private static final String UPDATE_USER_NAME_FIELD = "updateUserName";
 
     @Override
     public void insertFill(MetaObject metaObject) {
@@ -43,16 +45,11 @@ public class AuditMetaObjectHandler implements MetaObjectHandler {
             return false;
         }
 
-        if (metaObject.getOriginalObject() instanceof IUserAuditable) {
-            IUserAuditable originalObject = (IUserAuditable) metaObject.getOriginalObject();
-            if (originalObject == null) {
-                return false;
-            }
-
-            if (insert && (StringUtils.isEmpty(originalObject.getCreateUser()) || StringUtils.isEmpty(originalObject.getUpdateUser()))) {
+        if (metaObject.getOriginalObject() instanceof IUserAuditable originalObject) {
+            if (insert && (StringUtils.isEmpty(originalObject.getCreateUserAccount()) || StringUtils.isEmpty(originalObject.getCreateUserName()))) {
                 return true;
             } else {
-                return StringUtils.isEmpty(originalObject.getUpdateUser());
+                return StringUtils.isEmpty(originalObject.getUpdateUserAccount());
             }
         }
 
@@ -67,31 +64,42 @@ public class AuditMetaObjectHandler implements MetaObjectHandler {
         }
 
         String name = null;
-        if (current instanceof UserRolePrincipal) {
-            UserRolePrincipal userRolePrincipal = (UserRolePrincipal) current;
+        String account = null;
+
+        if (current instanceof UserRolePrincipal userRolePrincipal) {
             name = userRolePrincipal.getUseRoleIdentity().getUserDetail().fullname();
-        } else if (current instanceof ClaimsPrincipal) {
-            ClaimsPrincipal claimsPrincipal = (ClaimsPrincipal) current;
+            account = userRolePrincipal.getUseRoleIdentity().getUserDetail().account();
+        } else if (current instanceof ClaimsPrincipal claimsPrincipal) {
             for (ClaimsIdentity identity : claimsPrincipal.getIdentities()) {
-                Claim claim = identity.claimFirst(ClaimTypes.FULLNAME);
-                if (claim != null) {
-                    name = claim.getValue();
+                if (StringUtils.isEmpty(name)) {
+                    name = getFirstClaimValue(identity, ClaimTypes.FULLNAME);
+                }
+
+                if (StringUtils.isEmpty(account)) {
+                    account = getFirstClaimValue(identity, ClaimTypes.ACCOUNT);
                 }
             }
         }
 
-        if (StringUtils.isEmpty(name)) {
+        final String name0 = name;
+        final String account0 = account;
+
+        if (insert) {
+            this.strictInsertFill(metaObject, CREATE_USER_FIELD, defaultAuditUser(account0), String.class);
+            this.strictInsertFill(metaObject, CREATE_USER_NAME_FIELD, defaultAuditUser(name0), String.class);
             return;
         }
 
-        final String name0 = name;
-        Supplier<String> nameSupplier = () -> name0;
+        this.strictUpdateFill(metaObject, UPDATE_USER_FIELD, defaultAuditUser(account0), String.class);
+        this.strictUpdateFill(metaObject, UPDATE_USER_NAME_FIELD, defaultAuditUser(name0), String.class);
+    }
 
-        if (insert) {
-            this.strictInsertFill(metaObject, UPDATE_USER_FIELD, nameSupplier, String.class);
-            this.strictInsertFill(metaObject, CREATE_USER_FIELD, nameSupplier, String.class);
-        } else {
-            this.strictUpdateFill(metaObject, UPDATE_USER_FIELD, nameSupplier, String.class);
-        }
+    private String getFirstClaimValue(ClaimsIdentity identity, String claimType) {
+        Claim claim = identity.claimFirst(claimType);
+        return claim != null ? claim.getValue() : null;
+    }
+
+    private Supplier<String> defaultAuditUser(String value) {
+        return () -> StringUtils.isEmpty(value) ? "system" : value;
     }
 }

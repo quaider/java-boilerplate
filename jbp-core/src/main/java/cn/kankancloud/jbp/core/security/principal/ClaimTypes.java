@@ -11,5 +11,6 @@ public final class ClaimTypes {
     public static final String ROLE = CLAIM_TYPE_NAMESPACE + "/role";
 
     public static final String FULLNAME = CLAIM_TYPE_NAMESPACE + "/fullname";
+    public static final String ACCOUNT = CLAIM_TYPE_NAMESPACE + "/account";
 
 }

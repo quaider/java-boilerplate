@@ -2,7 +2,9 @@ package cn.kankancloud.jbp.core.abstraction;
 
 public interface IUserAuditable {
 
-    String getCreateUser();
+    String getCreateUserAccount();
+    String getCreateUserName();
 
-    String getUpdateUser();
+    String getUpdateUserAccount();
+    String getUpdateUserName();
 }

@@ -4,10 +4,10 @@ import cn.kankancloud.jbp.core.util.JsonUtil;
 import cn.kankancloud.jbp.mbp.persistence.EventPo;
 import cn.kankancloud.jbp.mbp.persistence.EventPoService;
 import com.google.common.collect.Lists;
-import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -35,8 +35,8 @@ class MbpEventStore implements IEventStore {
 
             eventPoService.save(eventPo);
 
-            if (f instanceof DomainEvent) {
-                ((DomainEvent) f).eventId(eventPo.getId());
+            if (f instanceof DomainEvent evt) {
+                evt.eventId(eventPo.getId());
             }
         });
     }

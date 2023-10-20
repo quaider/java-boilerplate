@@ -11,6 +11,8 @@ import java.util.Date;
 public abstract class BaseAuditable implements IAuditable {
     private Date createTime;
     private Date updateTime;
-    private String createUser;
-    private String updateUser;
+    private String createUserAccount;
+    private String createUserName;
+    private String updateUserAccount;
+    private String updateUserName;
 }
