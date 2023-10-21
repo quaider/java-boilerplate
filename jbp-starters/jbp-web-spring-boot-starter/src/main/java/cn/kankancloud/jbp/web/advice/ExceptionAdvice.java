@@ -1,8 +1,11 @@
 package cn.kankancloud.jbp.web.advice;
 
 import cn.kankancloud.jbp.core.Result;
+import cn.kankancloud.jbp.core.exception.BizAuthenticateException;
 import cn.kankancloud.jbp.core.exception.BizException;
+import cn.kankancloud.jbp.core.exception.BizUnAuthorizeException;
 import cn.kankancloud.jbp.core.exception.ErrorCodeI;
+import cn.kankancloud.jbp.web.util.RequestUtil;
 import cn.kankancloud.jbp.web.validation.FieldValidationError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
@@ -13,8 +16,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -72,6 +77,12 @@ public class ExceptionAdvice {
     @ExceptionHandler(BizException.class)
     @ResponseBody
     public Result<Object> handleBizException(BizException e) {
+        if (e instanceof BizAuthenticateException || e instanceof BizUnAuthorizeException) {
+            HttpServletResponse response = RequestUtil.getResponse();
+            // 401 unauthorized
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+
         return Result.failed(e.getCode(), e.getMessage());
     }
 

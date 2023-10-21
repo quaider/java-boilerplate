@@ -14,13 +14,6 @@ public class AuthorizeExpression {
         this.permissionChecker = permissionChecker;
     }
 
-    /**
-     * 允许匿名访问
-     */
-    public boolean anonymous() {
-        return true;
-    }
-
     public boolean permission(String permissionName) {
         return permissionChecker.hasPermission(permissionName);
     }

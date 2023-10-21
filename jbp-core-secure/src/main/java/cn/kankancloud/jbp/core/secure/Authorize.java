@@ -11,8 +11,10 @@ import java.lang.annotation.*;
 @Documented
 public @interface Authorize {
 
+    AuthorizeStrategy strategy() default AuthorizeStrategy.URL;
+
     /**
      * Spring el
      */
-    String value();
+    String value() default "";
 }

@@ -62,4 +62,9 @@ public class JwtUtil {
     private static String shorName(String claimType) {
         return claimType.substring(ClaimTypes.CLAIM_TYPE_NAMESPACE.length());
     }
+
+    public static void main(String[] args) {
+        String token = createToken("123456", 36000, new UseRoleIdentity(new UserDetail(null, "admin", "admin"), Lists.newArrayList("admin")));
+        System.out.println(token);
+    }
 }

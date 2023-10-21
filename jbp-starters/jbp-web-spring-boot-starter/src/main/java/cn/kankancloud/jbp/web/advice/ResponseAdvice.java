@@ -31,6 +31,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
         if (body instanceof Result) {
             return body;
         } else if (body instanceof String) {
+            response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
             // 如果controller方法中返回的是String类型，但是加了@ResponseBody注解，那么在ResponseBodyAdvice中拦截到String类型并且处理完后需要最后返回一个String类型（可以转换成json字符串），否则会报错。
             return objectMapper.writeValueAsString(Result.success(body));
         }

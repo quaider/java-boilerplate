@@ -19,30 +19,42 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
 @Aspect
+@Component
 public class AuthorizeInterceptor implements ApplicationContextAware {
 
     private static final ExpressionParser EL_PARSER = new SpelExpressionParser();
 
     @Around("@annotation(cn.kankancloud.jbp.core.secure.Authorize) || @within(cn.kankancloud.jbp.core.secure.Authorize)")
     public Object intercept(ProceedingJoinPoint point) throws Throwable {
+
         if (hasAuth(point)) {
             return point.proceed();
         }
 
-        throw new BizUnAuthorizeException();
+        throw new BizUnAuthorizeException("没有权限");
     }
 
     private boolean hasAuth(ProceedingJoinPoint point) {
         MethodSignature ms = (MethodSignature) point.getSignature();
         Method method = ms.getMethod();
+        Anonymous anonymous = method.getAnnotation(Anonymous.class);
+        if (anonymous != null) {
+            return true;
+        }
+
+        // must authenticated
+        applicationContext.getBean(AuthenticateChecker.class).mustAuthenticated();
+
         Authorize authorize = method.getAnnotation(Authorize.class);
-        String condition = authorize.value();
+        String condition = String.format("%s('%s')", authorize.strategy().getFuncName(), authorize.value());
+
         if (StringUtils.isBlank(condition)) {
-            return false;
+            return true;
         }
 
         Expression expression = EL_PARSER.parseExpression(condition);
