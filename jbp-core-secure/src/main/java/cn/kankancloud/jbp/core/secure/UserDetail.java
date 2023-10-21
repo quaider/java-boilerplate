@@ -1,17 +1,23 @@
 package cn.kankancloud.jbp.core.secure;
 
-import com.google.common.collect.Lists;
+import lombok.Data;
 
 import java.util.List;
 
-public interface UserDetail {
-    String identity();
+@Data
+public class UserDetail {
+    private String identity;
+    private String account;
+    private String fullname;
+    private List<String> departments;
 
-    String account();
+    public UserDetail() {
 
-    String fullname();
+    }
 
-    default List<String> departments() {
-        return Lists.newArrayList();
+    public UserDetail(String identity, String account, String fullname) {
+        this.identity = identity;
+        this.account = account;
+        this.fullname = fullname;
     }
 }

@@ -1,62 +1,49 @@
 package cn.kankancloud.jbp.core.secure;
 
-import cn.kankancloud.jbp.core.security.context.PrincipalContext;
-import cn.kankancloud.jbp.core.security.principal.ClaimTypes;
-import cn.kankancloud.jbp.core.security.principal.ClaimsPrincipal;
-import cn.kankancloud.jbp.core.security.principal.IPrincipal;
+import cn.kankancloud.jbp.core.secure.permission.PermissionChecker;
+import cn.kankancloud.jbp.web.util.RequestUtil;
 
-import java.util.Arrays;
-
+/**
+ * 权限表达式
+ */
 public class AuthorizeExpression {
+
+    private final PermissionChecker permissionChecker;
+
+    public AuthorizeExpression(PermissionChecker permissionChecker) {
+        this.permissionChecker = permissionChecker;
+    }
 
     /**
      * 允许匿名访问
      */
-    public boolean allowAnonymous() {
+    public boolean anonymous() {
         return true;
     }
 
-    public boolean hasPermission(String permissionName) {
-        return true;
+    public boolean permission(String permissionName) {
+        return permissionChecker.hasPermission(permissionName);
     }
 
     /**
      * 是否有当前地址的权限即可访问
      */
-    public boolean hasCurrentUrl() {
-        return true;
+    public boolean url() {
+        String requestURI = RequestUtil.getRequest().getRequestURI();
+        return permissionChecker.hasUrl(requestURI);
     }
 
     /**
      * 指定角色才能访问
      */
-    public boolean hasRole(String role) {
-        return hasAnyRole(role);
+    public boolean role(String role) {
+        return anyRole(role);
     }
 
     /**
      * 指定的任意角色均可访问
      */
-    public boolean hasAnyRole(String... matchRoles) {
-        if (matchRoles == null || matchRoles.length == 0) {
-            return false;
-        }
-
-        IPrincipal principal = PrincipalContext.getPrincipal();
-        if (principal == null) {
-            return false;
-        }
-
-        if (principal instanceof UserRolePrincipal) {
-            UserRolePrincipal userRolePrincipal = (UserRolePrincipal) principal;
-            return Arrays.stream(matchRoles).anyMatch(userRolePrincipal::isInRole);
-        }
-
-        if (principal instanceof ClaimsPrincipal) {
-            ClaimsPrincipal claimsPrincipal = (ClaimsPrincipal) principal;
-            return Arrays.stream(matchRoles).anyMatch(role -> claimsPrincipal.hasClaim(ClaimTypes.ROLE, role));
-        }
-
-        return false;
+    public boolean anyRole(String... matchRoles) {
+        return permissionChecker.hasAnyRole(matchRoles);
     }
 }

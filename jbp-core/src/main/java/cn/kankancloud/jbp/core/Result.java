@@ -63,6 +63,10 @@ public class Result<T> {
         return success(data);
     }
 
+    public static <T> Result<T> unauthenticated() {
+        return failed(ErrorCodeI.UNAUTHENTICATED, "未登录");
+    }
+
     public boolean isSuccess() {
         return code == ErrorCodeI.SUCCESS;
     }

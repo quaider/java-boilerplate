@@ -6,6 +6,7 @@ import cn.kankancloud.jbp.core.security.context.PrincipalHolder;
 import cn.kankancloud.jbp.core.security.context.SupportedPrincipalHolders;
 import cn.kankancloud.jbp.core.security.context.ThreadLocalPrincipalHolder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import java.util.concurrent.Executor;
 @Configuration
 @ComponentScan(basePackages = "cn.kankancloud.jbp")
 @EnableAsync
+@EnableConfigurationProperties(JbpProperties.class)
 public class WebAutoConfiguration {
 
     @Bean

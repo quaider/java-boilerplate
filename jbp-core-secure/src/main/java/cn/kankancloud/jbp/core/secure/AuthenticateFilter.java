@@ -1,12 +1,15 @@
 package cn.kankancloud.jbp.core.secure;
 
+import cn.kankancloud.jbp.core.Result;
 import cn.kankancloud.jbp.core.abstraction.IDisposable;
 import cn.kankancloud.jbp.core.security.context.SupportedPrincipalHolders;
 import cn.kankancloud.jbp.core.security.principal.IPrincipal;
 import cn.kankancloud.jbp.core.security.principal.PrincipalResolver;
+import cn.kankancloud.jbp.core.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -34,6 +37,13 @@ public class AuthenticateFilter extends OncePerRequestFilter {
 
         // fetch user principal from request
         IPrincipal principal = principalResolver.resolve(request);
+        if (principal == null || !principal.identity().isAuthenticated()) {
+            // 401 unauthorized
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+            response.getWriter().write(JsonUtil.toJson(Result.unauthenticated()));
+            return;
+        }
 
         // append principal to supported principal holders
         SupportedPrincipalHolders.getPrincipalFactories()

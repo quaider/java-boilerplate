@@ -1,6 +1,7 @@
 package cn.kankancloud.jbp.core.secure;
 
 import cn.kankancloud.jbp.core.exception.BizUnAuthorizeException;
+import cn.kankancloud.jbp.core.secure.permission.PermissionChecker;
 import cn.kankancloud.jbp.core.util.Bools;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -25,7 +26,6 @@ import java.lang.reflect.Method;
 public class AuthorizeInterceptor implements ApplicationContextAware {
 
     private static final ExpressionParser EL_PARSER = new SpelExpressionParser();
-
 
     @Around("@annotation(cn.kankancloud.jbp.core.secure.Authorize) || @within(cn.kankancloud.jbp.core.secure.Authorize)")
     public Object intercept(ProceedingJoinPoint point) throws Throwable {
@@ -62,7 +62,7 @@ public class AuthorizeInterceptor implements ApplicationContextAware {
      */
     private StandardEvaluationContext getEvaluationContext(Method method, Object[] args) {
         // 初始化Spring el表达式上下文
-        StandardEvaluationContext context = new StandardEvaluationContext(new AuthorizeExpression());
+        StandardEvaluationContext context = new StandardEvaluationContext(new AuthorizeExpression(applicationContext.getBean(PermissionChecker.class)));
         context.setBeanResolver(new BeanFactoryResolver(applicationContext));
         for (int i = 0; i < args.length; i++) {
             // 获取方法参数

@@ -22,8 +22,8 @@ public final class SupportedPrincipalHolders {
         if (principalFactories.stream().noneMatch(f -> f.name().equals(factory.name()))) {
             principalFactories.add(factory);
 
-            if (factory instanceof IDisposable) {
-                RequestScopeDisposableTracker.track((IDisposable) factory);
+            if (factory instanceof IDisposable disposableFactory) {
+                RequestScopeDisposableTracker.track(disposableFactory);
             }
 
             return;

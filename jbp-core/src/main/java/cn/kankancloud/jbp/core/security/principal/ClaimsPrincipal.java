@@ -25,8 +25,7 @@ public class ClaimsPrincipal implements IPrincipal {
             throw new IllegalArgumentException("identity");
         }
 
-        if (identity instanceof ClaimsIdentity) {
-            ClaimsIdentity ci = (ClaimsIdentity) identity;
+        if (identity instanceof ClaimsIdentity ci) {
             identities.add(ci);
         } else {
             identities.add(new ClaimsIdentity(identity));
@@ -38,8 +37,7 @@ public class ClaimsPrincipal implements IPrincipal {
             throw new IllegalArgumentException("principal");
         }
 
-        if (principal instanceof ClaimsPrincipal) {
-            ClaimsPrincipal cp = (ClaimsPrincipal) principal;
+        if (principal instanceof ClaimsPrincipal cp) {
             if (!cp.identities.isEmpty()) {
                 identities.addAll(cp.identities);
             }

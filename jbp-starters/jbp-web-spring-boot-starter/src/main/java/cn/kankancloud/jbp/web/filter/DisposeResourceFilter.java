@@ -13,13 +13,11 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class RequestContextBuilderFilter extends OncePerRequestFilter {
+public class DisposeResourceFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            // 用户信息
-            // 用户管理的租户
             filterChain.doFilter(request, response);
         } finally {
             // 释放上下文

@@ -67,8 +67,8 @@ public class AuditMetaObjectHandler implements MetaObjectHandler {
         String account = null;
 
         if (current instanceof UserRolePrincipal userRolePrincipal) {
-            name = userRolePrincipal.getUseRoleIdentity().getUserDetail().fullname();
-            account = userRolePrincipal.getUseRoleIdentity().getUserDetail().account();
+            name = userRolePrincipal.getUseRoleIdentity().getUserDetail().getFullname();
+            account = userRolePrincipal.getUseRoleIdentity().getUserDetail().getAccount();
         } else if (current instanceof ClaimsPrincipal claimsPrincipal) {
             for (ClaimsIdentity identity : claimsPrincipal.getIdentities()) {
                 if (StringUtils.isEmpty(name)) {

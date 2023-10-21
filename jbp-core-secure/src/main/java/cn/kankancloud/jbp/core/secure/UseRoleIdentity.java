@@ -23,7 +23,7 @@ public class UseRoleIdentity implements IIdentity {
 
     @Override
     public String name() {
-        return userDetail.account();
+        return userDetail.getAccount();
     }
 
     @Override
@@ -33,6 +33,6 @@ public class UseRoleIdentity implements IIdentity {
 
     @Override
     public boolean isAuthenticated() {
-        return !StringUtils.isNoneEmpty(userDetail.identity());
+        return StringUtils.isNotEmpty(userDetail.getAccount());
     }
 }
