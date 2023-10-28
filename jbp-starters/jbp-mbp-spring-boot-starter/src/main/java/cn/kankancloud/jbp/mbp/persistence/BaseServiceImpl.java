@@ -21,6 +21,6 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BasePo> extends 
 
     @Override
     public PagedData<T> pageQuery(Class<T> clazz, PageQuery pageQuery) {
-        return pageQuery(QueryUtil.buildPage(pageQuery, clazz), QueryUtil.createQuery(clazz, pageQuery));
+        return pageQuery(QueryUtil.buildPage(pageQuery), QueryUtil.createQuery(clazz, pageQuery));
     }
 }

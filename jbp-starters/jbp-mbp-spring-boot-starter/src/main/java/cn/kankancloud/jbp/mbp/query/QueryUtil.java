@@ -1,14 +1,14 @@
 package cn.kankancloud.jbp.mbp.query;
 
+import cn.kankancloud.jbp.core.query.PageQuery;
+import cn.kankancloud.jbp.core.query.QueryConditions;
+import cn.kankancloud.jbp.core.util.CastUtil;
+import cn.kankancloud.jbp.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import cn.kankancloud.jbp.core.query.PageQuery;
-import cn.kankancloud.jbp.core.query.QueryConditions;
-import cn.kankancloud.jbp.core.util.CastUtil;
-import cn.kankancloud.jbp.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
@@ -45,20 +45,16 @@ public class QueryUtil {
         SQL_KEYWORDS.put("not", "");
     }
 
-    public static <T> IPage<T> buildPage(PageQuery query) {
-        return buildPage(query, null);
-    }
-
     /**
      * 转化成mybatis plus中的Page
      *
      * @param query 查询条件
-     * @param clazz 泛型标识
      * @return IPage
      */
-    public static <T> IPage<T> buildPage(PageQuery query, Class<T> clazz) {
-        if (clazz != null) {
-            // 躲避sonar检查，clazz用于骗过编译器的类型检查
+    public static <T> IPage<T> buildPage(PageQuery query) {
+
+        if (query == null) {
+            query = new PageQuery();
         }
 
         Page<T> page = new Page<>(CastUtil.toInt(query.getCurrent(), 1), CastUtil.toInt(query.getPageSize(), 10));
@@ -111,9 +107,9 @@ public class QueryUtil {
     /**
      * 构建动态查询条件
      *
-     * @param clazz        待查询entity类型
+     * @param clazz           待查询entity类型
      * @param queryConditions 查询条件
-     * @param <T>          待查询entity类型
+     * @param <T>             待查询entity类型
      * @return mybatis 查询条件
      */
     public static <T> QueryWrapper<T> createQuery(Class<T> clazz, QueryConditions queryConditions) {

@@ -2,6 +2,7 @@ package cn.kankancloud.jbp.core.secure;
 
 import cn.kankancloud.jbp.core.exception.BizUnAuthorizeException;
 import cn.kankancloud.jbp.core.secure.permission.PermissionChecker;
+import cn.kankancloud.jbp.core.security.context.PrincipalContext;
 import cn.kankancloud.jbp.core.util.Bools;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -50,7 +51,16 @@ public class AuthorizeInterceptor implements ApplicationContextAware {
         // must authenticated
         applicationContext.getBean(AuthenticateChecker.class).mustAuthenticated();
 
+        // 超管不受权限约束
+        if ("admin".equals(PrincipalContext.getPrincipal().identity().name())) {
+            return true;
+        }
+
         Authorize authorize = method.getAnnotation(Authorize.class);
+        if (authorize == null) {
+            authorize = point.getTarget().getClass().getAnnotation(Authorize.class);
+        }
+
         String condition = String.format("%s('%s')", authorize.strategy().getFuncName(), authorize.value());
 
         if (StringUtils.isBlank(condition)) {
