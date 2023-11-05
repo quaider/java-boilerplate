@@ -3,7 +3,6 @@ package cn.kankancloud.jbp.mbp.query;
 import cn.kankancloud.jbp.core.PagedData;
 import cn.kankancloud.jbp.core.exception.BizException;
 import cn.kankancloud.jbp.core.query.PageQuery;
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -22,8 +21,7 @@ public class PageQueryBuilder<E, R> {
 
     private BaseMapper<E> mapper;
 
-    private Function<E, R> converter;
-
+    private Function<E, R> projector;
     private Consumer<QueryWrapper<E>> queryCustomizer;
 
     private PageQueryBuilder(Class<E> eClass, Class<R> rClass) {
@@ -49,8 +47,8 @@ public class PageQueryBuilder<E, R> {
         return this;
     }
 
-    public PageQueryBuilder<E, R> projectTo(Function<E, R> converter) {
-        this.converter = converter;
+    public PageQueryBuilder<E, R> project(Function<E, R> converter) {
+        this.projector = converter;
         return this;
     }
 
@@ -93,8 +91,8 @@ public class PageQueryBuilder<E, R> {
                         return (R) f;
                     }
 
-                    if (converter != null) {
-                        return converter.apply(f);
+                    if (projector != null) {
+                        return projector.apply(f);
                     }
 
                     throw new BizException("can not cast {} to {}", entityClass.getSimpleName(), resultClass.getSimpleName());

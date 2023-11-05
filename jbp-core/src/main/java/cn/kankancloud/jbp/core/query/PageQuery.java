@@ -25,10 +25,19 @@ public class PageQuery {
     @Schema(description = "页大小")
     private Integer pageSize = 10;
 
-    @Schema(description = "查询条件")
+    @Schema(description = "查询条件", example = """
+            {
+                    "conditions": [
+                        {
+                            "operator": "EQ",
+                            "field": "fullname",
+                            "value": "张奎"
+                        }
+                    ]
+                }""")
     private QueryConditions filter;
 
-    @Schema(description = "排序")
+    @Schema(description = "排序", example = "字段名1 desc,字段名2 asc 或者 array ['字段名1 desc','字段名2 asc']")
     private Object sort;
 
     @SuppressWarnings("unchecked")

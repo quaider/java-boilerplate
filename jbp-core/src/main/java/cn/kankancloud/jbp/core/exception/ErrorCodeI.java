@@ -49,6 +49,11 @@ public interface ErrorCodeI {
     int NOT_FOUND = 40400;
 
     /**
+     * not supported
+     */
+    int NOT_SUPPORTED = 40500;
+
+    /**
      * 超时
      */
     int TIMEOUT = 40800;

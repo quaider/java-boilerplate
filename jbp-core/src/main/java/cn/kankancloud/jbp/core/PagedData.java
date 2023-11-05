@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.function.Function;
 
 @Getter
 @Setter
@@ -21,4 +22,8 @@ public class PagedData<T> {
 
     @Schema(description = "当前页")
     private long current = 0;
+
+    public <E> PagedData<E> project(Function<T, E> converter) {
+        return new PagedData<>(records.stream().map(converter).toList(), total, current);
+    }
 }

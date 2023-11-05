@@ -7,7 +7,10 @@ import cn.kankancloud.jbp.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
+import com.baomidou.mybatisplus.core.toolkit.ClassUtils;
+import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -171,7 +174,14 @@ public class QueryUtil {
      * @param <S>               重写后的查询实体类型
      */
     public static <S, T> QueryWrapper<S> rewriteSelect(QueryWrapper<S> wrapper, Class<T> searchResultClass) {
-        List<Field> allFields = TableInfoHelper.getAllFields(searchResultClass);
+        List<Field> allFields;
+        TableInfo tableInfo = TableInfoHelper.getTableInfo(searchResultClass);
+        if (tableInfo != null) {
+            allFields = TableInfoHelper.getAllFields(searchResultClass);
+        } else {
+            allFields = ReflectionKit.getFieldList(ClassUtils.getUserClass(searchResultClass));
+        }
+
         if (ObjectUtils.isNotEmpty(allFields)) {
             return wrapper.select(allFields.stream().map(f -> StrUtil.camelCaseToUnderline(sqlKeywordHacker(f.getName()))).toArray(String[]::new));
         }
